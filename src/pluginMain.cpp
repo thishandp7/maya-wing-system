@@ -8,6 +8,8 @@ MStatus initializePlugin(MObject obj)
 
 	CHECK_MSTATUS(fnPlugin.registerContextCommand("wingSystem", WingSys::creator));
 
+	MGlobal::executeCommand("wingSystem wingSystem1;");
+
 	return MS::kSuccess;
 }
 

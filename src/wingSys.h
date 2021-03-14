@@ -1,6 +1,7 @@
 #pragma once
 
 #include <maya/MPxContextCommand.h>
+#include "wingSysContext.h"
 
 class WingSys: public MPxContextCommand
 {
@@ -8,8 +9,13 @@ public:
 	WingSys();
 	virtual ~WingSys();
 
-	MPxContext* makeObj() override;
-
 	static void* creator();
-	static MStatus initialize();
+
+	virtual MStatus doEditFlags();
+	virtual MStatus doQueryFlags();
+	virtual MStatus appendSyntax();
+	virtual MPxContext* makeObj() override;
+
+protected:
+	WingSysContext* wingSysContext;
 };

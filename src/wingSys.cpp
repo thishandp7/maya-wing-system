@@ -20,7 +20,17 @@ void* WingSys::creator()
 	return new WingSys();
 }
 
-MStatus WingSys::initialize()
+MStatus WingSys::doEditFlags()
 {
-	return MS::kSuccess;
+	return MStatus();
+}
+
+MStatus WingSys::doQueryFlags()
+{
+	return MStatus();
+}
+
+MStatus WingSys::appendSyntax()
+{
+	return MStatus();
 }
