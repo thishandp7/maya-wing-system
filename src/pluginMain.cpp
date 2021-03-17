@@ -17,7 +17,7 @@ MStatus uninitializePlugin(MObject obj)
 {
 	MFnPlugin fnPlugin(obj);
 
-	CHECK_MSTATUS(fnPlugin.deregisterCommand("wingSystem"));
+	CHECK_MSTATUS(fnPlugin.deregisterContextCommand("wingSystem"));
 
 	return MS::kSuccess;
 }

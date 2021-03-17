@@ -3,6 +3,10 @@
 #include <maya/M3dView.h>
 #include <maya/MPxContext.h>
 #include <maya/MGlobal.h>
+#include <maya/MUiMessage.h>
+#include <maya/MPoint.h>
+#include <maya/MPxLocatorNode.h>
+
 
 class WingSysContext : public MPxContext
 {
@@ -11,6 +15,8 @@ public:
 	virtual ~WingSysContext();
 
 	virtual void toolOnSetup(MEvent& event);
+	virtual void toolOffCleanup();
+	virtual void getClassName(MString& name) const;
 
 	virtual MStatus doPress(
 		MEvent& event, 
@@ -30,10 +36,14 @@ public:
 		const MHWRender::MFrameContext& context
 	) override;
 
-private:
-	short start_x, start_y;
-	short last_x, last_y;
+	MStatus getIntersectionPoint(short mouseX, short mouseY);
 
-	MGlobal::ListAdjustment listAdjustment;
-	M3dView view;
+private:
+
+	M3dView			m_view;
+	MCallbackId		m_postRenderId;
+	MPoint			m_intersectionPoint;
+	MVector			m_cameraNormal;
+	MPxLocatorNode	m_shoulderLocator;
+	MPxLocatorNode	m_handlerLocator;
 };
