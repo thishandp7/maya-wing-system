@@ -1,14 +1,14 @@
 #include <maya/MFnPlugin.h>
 
-#include "wingSys.h"
+#include "createWingContextCommand.h"
 
 MStatus initializePlugin(MObject obj)
 {
 	MFnPlugin fnPlugin(obj, "thishandp7", "4.5", "Any");
 
-	CHECK_MSTATUS(fnPlugin.registerContextCommand("wingSystem", WingSys::creator));
+	CHECK_MSTATUS(fnPlugin.registerContextCommand("createWingContextCommand", CreateWingContextCommand::creator));
 
-	MGlobal::executeCommand("wingSystem wingSystem1;");
+	MGlobal::executeCommand("createWingContextCommand createWingContextCommand;");
 
 	return MS::kSuccess;
 }
@@ -17,7 +17,7 @@ MStatus uninitializePlugin(MObject obj)
 {
 	MFnPlugin fnPlugin(obj);
 
-	CHECK_MSTATUS(fnPlugin.deregisterContextCommand("wingSystem"));
+	CHECK_MSTATUS(fnPlugin.deregisterContextCommand("createWingContextCommand"));
 
 	return MS::kSuccess;
 }

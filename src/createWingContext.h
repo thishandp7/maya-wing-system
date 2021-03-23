@@ -8,11 +8,11 @@
 #include <maya/MPxLocatorNode.h>
 
 
-class WingSysContext : public MPxContext
+class CreateWingContext : public MPxContext
 {
 public:
-	WingSysContext();
-	virtual ~WingSysContext();
+	CreateWingContext();
+	virtual ~CreateWingContext();
 
 	virtual void toolOnSetup(MEvent& event);
 	virtual void toolOffCleanup();
@@ -44,6 +44,5 @@ private:
 	MCallbackId		m_postRenderId;
 	MPoint			m_intersectionPoint;
 	MVector			m_cameraNormal;
-	MPxLocatorNode	m_shoulderLocator;
-	MPxLocatorNode	m_handlerLocator;
+	MPoint			m_clickPoint;
 };

@@ -1,13 +1,13 @@
 #pragma once
 
 #include <maya/MPxContextCommand.h>
-#include "wingSysContext.h"
+#include "createWingContext.h"
 
-class WingSys: public MPxContextCommand
+class CreateWingContextCommand: public MPxContextCommand
 {
 public:
-	WingSys();
-	virtual ~WingSys();
+	CreateWingContextCommand();
+	virtual ~CreateWingContextCommand();
 
 	static void* creator();
 
@@ -17,5 +17,5 @@ public:
 	virtual MPxContext* makeObj() override;
 
 protected:
-	WingSysContext* wingSysContext;
+	CreateWingContext* createWingContext;
 };
