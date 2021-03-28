@@ -1,11 +1,11 @@
 #include "createWingContext.h"
-#include "createWingToolCommand.h"
-#include <iostream>
-#include <string>
 
 CreateWingContext::CreateWingContext()
 {
 	setTitleString("Create Wing");
+	isControllerReady = false;
+	isShoulderReady = false;
+	cout << "CreateWingContext Created!" << endl;
 }
 
 CreateWingContext::~CreateWingContext()
@@ -15,7 +15,6 @@ CreateWingContext::~CreateWingContext()
 void CreateWingContext::toolOnSetup(MEvent& event)
 {
 	setHelpString("Click to create locators");
-
 	m_view = M3dView::active3dView();
 }
 
@@ -31,23 +30,37 @@ MStatus CreateWingContext::doPress(MEvent& event, MHWRender::MUIDrawManager& dra
 
 MStatus CreateWingContext::doRelease(MEvent& event, MHWRender::MUIDrawManager& drawMgr, const MHWRender::MFrameContext& context)
 {
+	//Create Locators
+	if (isControllerReady) {
+		return MS::kSuccess;
+	}
+	else if (isShoulderReady) {
+		wCommand = (CreateLocatorToolCommand*)newToolCommand();
+		wCommand->setClickPoint(m_clickPoint);
+		wCommand->setName("controller");
+		wCommand->redoIt();
+		wCommand->finalize();
+		controlLocatorDagPath = wCommand->getLocatorDagPath();
+		isControllerReady = true;
+	} else {
+		wCommand = (CreateLocatorToolCommand*)newToolCommand();
+		wCommand->setClickPoint(m_clickPoint);
+		wCommand->setName("shoulder");
+		wCommand->redoIt();
+		wCommand->finalize();
+		shoulderLocatorDagPath = wCommand->getLocatorDagPath();
+		isShoulderReady = true;
+	}
+
+	//Force refresh viewport
+	m_view.refresh(false, true);
+
 	cout << "Button released!" << endl;
 
-	CreateWingToolCommand* wCommand = (CreateWingToolCommand*)newToolCommand();
-	wCommand->setClickPoint(m_clickPoint);
-	wCommand->redoIt();
-	wCommand->finalize();
-
 	return MS::kSuccess;
 }
 
-MStatus CreateWingContext::doDrag(MEvent& event, MHWRender::MUIDrawManager& drawMgr, const MHWRender::MFrameContext& context)
-{
-	cout << "dragging!" << endl;
-	return MS::kSuccess;
-}
-
-MStatus CreateWingContext::getIntersectionPoint(short mouseX, short mouseY)
+MStatus CreateWingContext::getIntersectionPoint(double mouseX, double mouseY)
 {
 	MPoint nearClip;
 	MPoint farClip;
@@ -71,23 +84,12 @@ MStatus CreateWingContext::getIntersectionPoint(short mouseX, short mouseY)
 	substitute t and solve for x and z values in the 3D line equation  
 	*/
 
-	float t_value = -(nearClip.y / farClip.y);
+	double t_value = -((double)nearClip.y / (double)farClip.y);
 
-	float x_intersection = nearClip.x + (t_value * farClip.x);
-	float z_intersection = nearClip.z + (t_value * farClip.z);
+	double x_intersection = nearClip.x + (t_value * farClip.x);
+	double z_intersection = nearClip.z + (t_value * farClip.z);
 
 	m_clickPoint = MPoint(x_intersection, 0, z_intersection);
-
-	//std::string createLocator = "spaceLocator -p " + 
-	//	std::to_string(x_intersection) +
-	//	" 0 " +
-	//	std::to_string(z_intersection) + ";";
-
-	//char command[sizeof(createLocator) + 1];
-
-	//strcpy(command, createLocator.c_str());
-
-	//MGlobal::executeCommand(command);
 
 	return MS::kSuccess;
 }
@@ -104,4 +106,7 @@ void CreateWingContext::toolOffCleanup()
 		MMessage::removeCallback(m_postRenderId);
 		m_postRenderId = 0;
 	}
+	isControllerReady = false;
+	isShoulderReady = false;
+	cout << "Wing Context deactivated!" << endl;
 }

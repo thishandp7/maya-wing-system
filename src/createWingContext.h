@@ -1,11 +1,17 @@
 #pragma once
 
+#include <iostream>
+#include <string>
+
 #include <maya/M3dView.h>
 #include <maya/MPxContext.h>
 #include <maya/MGlobal.h>
 #include <maya/MUiMessage.h>
 #include <maya/MPoint.h>
 #include <maya/MPxLocatorNode.h>
+#include <maya/MDagPath.h>
+
+#include "createLocatorToolCommand.h"
 
 
 class CreateWingContext : public MPxContext
@@ -30,13 +36,7 @@ public:
 		const MHWRender::MFrameContext& context
 	) override;
 
-	virtual MStatus doDrag(
-		MEvent& event, 
-		MHWRender::MUIDrawManager& drawMgr, 
-		const MHWRender::MFrameContext& context
-	) override;
-
-	MStatus getIntersectionPoint(short mouseX, short mouseY);
+	MStatus getIntersectionPoint(double mouseX, double mouseY);
 
 private:
 
@@ -45,4 +45,11 @@ private:
 	MPoint			m_intersectionPoint;
 	MVector			m_cameraNormal;
 	MPoint			m_clickPoint;
+
+	MDagPath shoulderLocatorDagPath;
+	MDagPath controlLocatorDagPath;
+	bool isControllerReady;
+	bool isShoulderReady;
+
+	CreateLocatorToolCommand* wCommand;
 };
