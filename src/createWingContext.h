@@ -12,6 +12,7 @@
 #include <maya/MDagPath.h>
 
 #include "createLocatorToolCommand.h"
+#include "createJointSystem.h"
 
 
 class CreateWingContext : public MPxContext
@@ -22,7 +23,6 @@ public:
 
 	virtual void toolOnSetup(MEvent& event);
 	virtual void toolOffCleanup();
-	virtual void getClassName(MString& name) const;
 
 	virtual MStatus doPress(
 		MEvent& event, 

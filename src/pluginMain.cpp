@@ -13,7 +13,7 @@ MStatus initializePlugin(MObject obj)
 		CreateLocatorToolCommand::creator
 	));
 
-	MGlobal::executeCommand("createWingContextCommand createWingContextCommand;");
+	MGlobal::executeCommand("createWingContextCommand createWingContextCommand1;");
 
 	return MS::kSuccess;
 }

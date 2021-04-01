@@ -42,6 +42,8 @@ MStatus CreateWingContext::doRelease(MEvent& event, MHWRender::MUIDrawManager& d
 		wCommand->finalize();
 		controlLocatorDagPath = wCommand->getLocatorDagPath();
 		isControllerReady = true;
+		//create joint system
+		CreateJointSystem createJointSystem(shoulderLocatorDagPath, controlLocatorDagPath);
 	} else {
 		wCommand = (CreateLocatorToolCommand*)newToolCommand();
 		wCommand->setClickPoint(m_clickPoint);
@@ -92,11 +94,6 @@ MStatus CreateWingContext::getIntersectionPoint(double mouseX, double mouseY)
 	m_clickPoint = MPoint(x_intersection, 0, z_intersection);
 
 	return MS::kSuccess;
-}
-
-void CreateWingContext::getClassName(MString& name) const
-{
-	name.set("wingSystemContext");
 }
 
 void CreateWingContext::toolOffCleanup()
